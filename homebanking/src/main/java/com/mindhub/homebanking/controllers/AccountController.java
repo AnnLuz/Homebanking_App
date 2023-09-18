@@ -39,17 +39,17 @@ public class AccountController {
     @Autowired
     private ClientService clientService;
 
-    @RequestMapping("/accounts")
+    @GetMapping("/accounts")
     public List<AccountDTO> getAccounts(){
 
         return accountService.getAccounts();
     }
-    @RequestMapping("/accounts/{id}")
+    @GetMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable long id){
         return accountService.getAccountDTO(id);
     }
 
-    @RequestMapping("/clients/current/accounts")
+    @GetMapping("/clients/current/accounts")
     public List<AccountDTO> getCurrentAccount(Authentication authentication){
         return clientRepository.findByEmail(authentication.getName()).getAccounts().stream().map(AccountDTO::new).collect(toList());
     }

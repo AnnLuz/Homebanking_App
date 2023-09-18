@@ -41,7 +41,7 @@ public class LoanController {
     private TransactionRepository transactionRepository;
 
     //obtenemos todos los prestamos
-    @RequestMapping("/loans")
+    @GetMapping("/loans")
     public List<LoanDTO> getLoan(){
         List<Loan> listLoan = loanRepository.findAll();
         List<LoanDTO> listLoanDTO =
@@ -51,14 +51,14 @@ public class LoanController {
                         .collect(toList());
         return listLoanDTO;
     }
-    @RequestMapping("/loans/{id}")
+    @GetMapping("/loans/{id}")
     public LoanDTO getLoans(@PathVariable long id){
         return new LoanDTO(loanRepository.findById(id).orElse(null));
     }
 
 
     @Transactional
-    @RequestMapping(value = "/loans",method = RequestMethod.POST)
+    @PostMapping("/loans")
     public ResponseEntity<Object> registerTransaction(@RequestBody LoanAplicationDTO loanAplicationDTO,Authentication authentication){
 
 

@@ -38,7 +38,7 @@ public class CardController {
     private ClientService clientService;
 
 
-    @RequestMapping("/clients/current/cards")
+    @GetMapping("/clients/current/cards")
     public List<CardDTO> getCardsCurrent(Authentication authentication) {
         Client client = clientService.findByEmail(authentication.getName());
         List<CardDTO> currentCards = client.getCards().stream().map(CardDTO::new).collect(toList());

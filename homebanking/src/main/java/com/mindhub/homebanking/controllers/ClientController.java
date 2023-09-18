@@ -45,7 +45,7 @@ public class ClientController {
         return clientService.getClientsDTO();
     }
 
-    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public ResponseEntity<Object>getClient(@PathVariable long id, Authentication authentication){
         Client client = clientService.findByEmail(authentication.getName());
         Account account = accountService.findById(id);
@@ -57,14 +57,14 @@ public class ClientController {
         }
     }
 
-    @RequestMapping("/clients/current")
+    @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication){
         Client client = clientService.findByEmail(authentication.getName());
         return  new ClientDTO(client);
     }
 
     @Transactional
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping("/clients")
     public ResponseEntity<Object> register(@RequestParam String firstName,
                                            @RequestParam String lastName,
                                            @RequestParam String email,
