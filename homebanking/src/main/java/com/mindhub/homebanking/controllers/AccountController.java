@@ -1,10 +1,14 @@
 package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
+import com.mindhub.homebanking.dtos.CardDTO;
+import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.service.AccountService;
+import com.mindhub.homebanking.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,19 +33,20 @@ public class AccountController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private  AccountService accountService;
+
+    @Autowired
+    private ClientService clientService;
+
     @RequestMapping("/accounts")
     public List<AccountDTO> getAccounts(){
-        List<Account> listAccount = accountRepository.findAll();
-        List<AccountDTO> listAccountDTO =
-                listAccount
-                        .stream()
-                        .map(account -> new AccountDTO(account))
-                        .collect(toList());
-        return listAccountDTO;
+
+        return accountService.getAccounts();
     }
     @RequestMapping("/accounts/{id}")
-    public AccountDTO getAccounts(@PathVariable long id){
-        return new AccountDTO(accountRepository.findById(id).orElse(null));
+    public AccountDTO getAccount(@PathVariable long id){
+        return accountService.getAccountDTO(id);
     }
 
     @RequestMapping("/clients/current/accounts")
@@ -54,7 +59,7 @@ public class AccountController {
     public ResponseEntity<Account> registerAccount(Authentication authentication){
 
         if (authentication != null){
-            Client client = clientRepository.findByEmail(authentication.getName());
+            Client client = clientService.findByEmail(authentication.getName());
             Account account;
 
             if (client.getAccounts().size()>=3){
@@ -71,10 +76,9 @@ public class AccountController {
 
                 account = new Account(("VIN-" + accountNumber), LocalDateTime.now(), 0d);
                 client.addAccount(account);
-                accountRepository.save(account);
+                accountService.accountAdd(account);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
         }return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
-
 }
