@@ -7,6 +7,7 @@ import com.mindhub.homebanking.dtos.LoanAplicationDTO;
 import com.mindhub.homebanking.dtos.LoanDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,11 @@ public class LoanController {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private LoanService loanService;
+
+
 
     //obtenemos todos los prestamos
     @GetMapping("/loans")
