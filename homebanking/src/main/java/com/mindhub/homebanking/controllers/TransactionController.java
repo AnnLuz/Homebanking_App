@@ -1,6 +1,7 @@
 package com.mindhub.homebanking.controllers;
 
 
+import com.mindhub.homebanking.dtos.LoanDTO;
 import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
@@ -11,6 +12,7 @@ import com.mindhub.homebanking.repositories.CardRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import com.mindhub.homebanking.service.ClientService;
+import com.mindhub.homebanking.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,17 +43,13 @@ public class TransactionController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private TransactionService transactionService;
+
 
     @GetMapping("/transactions")
     public List<TransactionDTO> getTransactions(){
-        List<Transaction> listTransaction = transactionRepository.findAll();
-        List<TransactionDTO> listTransactionDTO =
-                listTransaction
-                        .stream()
-                        .map(transaction -> new TransactionDTO(transaction))
-                        .collect(Collectors.toList());
-
-        return listTransactionDTO;
+        return transactionService.getTransactions();
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import com.mindhub.homebanking.dtos.LoanAplicationDTO;
 import com.mindhub.homebanking.dtos.LoanDTO;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.service.ClientService;
 import com.mindhub.homebanking.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,22 +45,23 @@ public class LoanController {
     @Autowired
     private LoanService loanService;
 
+    @Autowired
+    private ClientService clientService;
+
+
+
 
 
     //obtenemos todos los prestamos
     @GetMapping("/loans")
     public List<LoanDTO> getLoan(){
-        List<Loan> listLoan = loanRepository.findAll();
-        List<LoanDTO> listLoanDTO =
-                listLoan
-                        .stream()
-                        .map(loan -> new LoanDTO(loan))
-                        .collect(toList());
-        return listLoanDTO;
+
+        return loanService.getLoanDTO();
     }
     @GetMapping("/loans/{id}")
     public LoanDTO getLoans(@PathVariable long id){
-        return new LoanDTO(loanRepository.findById(id).orElse(null));
+
+        return loanService.getLoansDTO(id);
     }
 
 
